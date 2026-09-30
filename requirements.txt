@@ -1,0 +1,2 @@
+# No external Python dependencies are required for the current product shell.
+# This project uses the Python standard library only.

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RequestForge</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-light: rgba(30, 41, 59, 0.9);
+      --accent: #8b5cf6;
+      --accent-2: #22d3ee;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --success: #34d399;
+      --error: #f87171;
+      --line: rgba(148, 163, 184, 0.2);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Segoe UI, sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0%, #020817 45%, #01040a 100%);
+      color: var(--text);
+    }
+
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0 28px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(139, 92, 246, 0.8);
+    }
+
+    .nav {
+      display: flex;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      color: var(--text);
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #050b16;
+      border: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr;
+      gap: 24px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 20px 45px rgba(2, 6, 23, 0.45);
+      padding: 20px;
+    }
+
+    .panel h2 {
+      margin: 0 0 20px;
+      font-size: 1.12rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 260px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      min-height: 44px;
+    }
+
+    .status.success {
+      border-color: rgba(52, 211, 153, 0.45);
+      color: #bbf7d0;
+    }
+
+    .status.error {
+      border-color: rgba(248, 113, 113, 0.45);
+      color: #fecaca;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      background: var(--panel-light);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.6rem;
+      margin-top: 8px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+    }
+
+    .preview {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(2, 6, 23, 0.8);
+      color: var(--muted);
+      word-break: break-all;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .grid, .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span>RequestForge</span>
+      </div>
+      <nav class="nav">
+        <button class="button">Workspace</button>
+        <button class="button">Library</button>
+        <button class="button primary">Generate</button>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <h2>Request Validation Studio</h2>
+
+        <label for="request">Raw HTTP Request</label>
+        <textarea id="request" placeholder="POST /api/session HTTP/1.1
+Host: secure-portal.internal
+Content-Type: application/json
+
+{"user_id":"2451","action":"update_profile"}"></textarea>
+
+        <div class="row">
+          <div>
+            <label for="redirect_url">Redirect URL</label>
+            <input id="redirect_url" value="about:blank" />
+          </div>
+          <div>
+            <label for="template">Template</label>
+            <select id="template">
+              <option value="stealth">Stealth</option>
+              <option value="portal">Portal</option>
+              <option value="login">Login</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 14px;">
+          <div>
+            <label for="title">Campaign Name</label>
+            <input id="title" value="Request Validation" />
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button class="button primary" id="generateBtn" style="width: 100%; height: 100%;">Generate PoC</button>
+          </div>
+        </div>
+
+        <div class="status" id="statusBox">Ready to validate a request flow.</div>
+      </section>
+
+      <aside class="panel">
+        <h2>Overview</h2>
+        <div class="stats">
+          <div class="stat">
+            <span>Templates</span>
+            <strong>3</strong>
+          </div>
+          <div class="stat">
+            <span>Formats</span>
+            <strong>4</strong>
+          </div>
+          <div class="stat">
+            <span>Exports</span>
+            <strong>HTML</strong>
+          </div>
+          <div class="stat">
+            <span>Mode</span>
+            <strong>Live</strong>
+          </div>
+        </div>
+        <div class="preview" id="previewBox">No output generated yet.</div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const statusBox = document.getElementById('statusBox');
+    const previewBox = document.getElementById('previewBox');
+    const generateBtn = document.getElementById('generateBtn');
+
+    generateBtn.addEventListener('click', async () => {
+      const form = new URLSearchParams();
+      form.append('request', document.getElementById('request').value);
+      form.append('redirect_url', document.getElementById('redirect_url').value);
+      form.append('template', document.getElementById('template').value);
+      form.append('title', document.getElementById('title').value);
+
+      statusBox.textContent = 'Generating request package...';
+      statusBox.className = 'status';
+
+      try {
+        const response = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: form.toString()
+        });
+
+        const payload = await response.json();
+        if (!response.ok || payload.status !== 'ok') {
+          throw new Error(payload.message || 'Generation failed');
+        }
+
+        statusBox.textContent = `PoC generated: ${payload.file}`;
+        statusBox.className = 'status success';
+        previewBox.innerHTML = `<strong>Preview:</strong><br><a href="${payload.preview_url}" target="_blank" rel="noopener">Open generated PoC</a>`;
+      } catch (error) {
+        statusBox.textContent = error.message;
+        statusBox.className = 'status error';
+        previewBox.textContent = 'Generation failed.';
+      }
+    });
+  </script>
+</body>
+</html>
